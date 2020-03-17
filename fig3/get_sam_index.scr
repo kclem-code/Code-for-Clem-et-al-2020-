@@ -1,0 +1,56 @@
+#!/bin/sh
+
+ddir=/Volumes/kclem_backup/data1/CMIP5/picontrol_seas_data
+xdir=/Volumes/kclem_backup/data4/kclem/programs/EXEC
+
+## CALCULATE THE DIFFERENCE IN NORMALIZED SLP AT 40S MINUS 65S IN THE CMIP5 MODELS
+for model in ACCESS1_0_r1i1p1 ACCESS1_3_r1i1p1 bcc_csm1_1_m_r1i1p1 bcc_csm1_1_r1i1p1 BNU_ESM_r1i1p1 CanESM2_r1i1p1 CCSM4_r1i1p1 CCSM4_r2i1p1 CCSM4_r3i1p1 CESM1_BGC_r1i1p1 CESM1_CAM5_r1i1p1 CESM1_FASTCHEM_r1i1p1 CESM1_WACCM_r1i1p1 CMCC_CESM_r1i1p1 CMCC_CM_r1i1p1 CMCC_CMS_r1i1p1 CNRM_CM5_2_r1i1p1 CNRM_CM5_r1i1p1 CSIRO_Mk3_6_0_r1i1p1 EC_EARTH_r1i1p1 FGOALS_g2_r1i1p1 FGOALS_s2_r1i1p1 FIO_ESM_r1i1p1 GFDL_CM3_r1i1p1 GFDL_ESM2G_r1i1p1 GFDL_ESM2M_r1i1p1 GISS_E2_H_CC_r1i1p1 GISS_E2_H_r1i1p1 GISS_E2_H_r1i1p2 GISS_E2_H_r1i1p3 GISS_E2_R_CC_r1i1p1 GISS_E2_R_r1i1p141 GISS_E2_R_r1i1p142 GISS_E2_R_r1i1p1 GISS_E2_R_r1i1p2 GISS_E2_R_r1i1p3 HadGEM2_CC_r1i1p1 HadGEM2_ES_r1i1p1 inmcm4_r1i1p1 IPSL_CM5A_LR_r1i1p1 IPSL_CM5A_MR_r1i1p1 IPSL_CM5B_LR_r1i1p1 MIROC4h_r1i1p1 MIROC5_r1i1p1 MIROC_ESM_CHEM_r1i1p1 MIROC_ESM_r1i1p1 MPI_ESM_LR_r1i1p1 MPI_ESM_MR_r1i1p1 MPI_ESM_P_r1i1p1 MRI_CGCM3_r1i1p1 NorESM1_ME_r1i1p1 NorESM1_M_r1i1p1
+do
+
+for var in psl
+#ts tas
+do
+
+for seas in ann 
+do
+
+## get 40S 
+x1=1  
+x2=180 
+y1=26  #40S
+y2=26  
+
+cdo zonavg -selindexbox,${x1},${x2},${y1},${y2} ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_40S_zonavg.nc
+
+## get 65S 
+x1=1  
+x2=180 
+y1=13  #66S
+y2=13  
+
+cdo zonavg -selindexbox,${x1},${x2},${y1},${y2} ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_65S_zonavg.nc
+
+
+for lat in 40S 65S
+do
+
+cdo timmean ${var}_piControl_Amon_${model}_${seas}_${lat}_zonavg.nc ${var}_piControl_Amon_${model}_${seas}_${lat}_zonavg_ltm.nc
+
+cdo timstd ${var}_piControl_Amon_${model}_${seas}_${lat}_zonavg.nc ${var}_piControl_Amon_${model}_${seas}_${lat}_zonavg_stdev.nc
+
+cdo ymonsub ${var}_piControl_Amon_${model}_${seas}_${lat}_zonavg.nc ${var}_piControl_Amon_${model}_${seas}_${lat}_zonavg_ltm.nc ${var}_piControl_Amon_${model}_${seas}_${lat}_zonavg_anom.nc
+
+cdo ymondiv ${var}_piControl_Amon_${model}_${seas}_${lat}_zonavg_anom.nc ${var}_piControl_Amon_${model}_${seas}_${lat}_zonavg_stdev.nc ${var}_piControl_Amon_${model}_${seas}_${lat}_zonavg_stdzd.nc
+
+done
+
+
+cdo sub ${var}_piControl_Amon_${model}_${seas}_40S_zonavg_stdzd.nc ${var}_piControl_Amon_${model}_${seas}_65S_zonavg_stdzd.nc ${var}_piControl_Amon_${model}_${seas}_samindex.nc
+
+cdo output ${var}_piControl_Amon_${model}_${seas}_samindex.nc > ${var}_piControl_Amon_${model}_${seas}_samindex.txt
+
+done
+done
+done
+
+

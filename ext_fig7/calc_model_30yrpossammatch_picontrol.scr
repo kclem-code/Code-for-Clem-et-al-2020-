@@ -1,0 +1,493 @@
+#!/bin/sh
+
+ddir=/Volumes/kclem_backup/data1/CMIP5/picontrol_seas_data
+xdir=/Volumes/kclem_backup/data4/kclem/programs/EXEC
+
+## THIS SCRIPT CALCULATES THE TREND DURING THE 30-YEAR PERIOD OVER WHICH THE SAM TREND EQUALED THE OBSERVED 1989-2018 SAM TREND (+2.14 PER 30-YEAR) IN EACH ENSEMBLE MEMBER. EC_EARTH DOES NOT HAVE TS, SO NOT INCLUDING IT HERE
+
+for model in ACCESS1_0_r1i1p1 ACCESS1_3_r1i1p1 bcc_csm1_1_m_r1i1p1 bcc_csm1_1_r1i1p1 BNU_ESM_r1i1p1 CanESM2_r1i1p1 CCSM4_r1i1p1 CCSM4_r2i1p1 CCSM4_r3i1p1 CESM1_BGC_r1i1p1 CESM1_CAM5_r1i1p1 CESM1_FASTCHEM_r1i1p1 CESM1_WACCM_r1i1p1 CMCC_CESM_r1i1p1 CMCC_CM_r1i1p1 CMCC_CMS_r1i1p1 CNRM_CM5_2_r1i1p1 CNRM_CM5_r1i1p1 CSIRO_Mk3_6_0_r1i1p1 FGOALS_g2_r1i1p1 FGOALS_s2_r1i1p1 FIO_ESM_r1i1p1 GFDL_CM3_r1i1p1 GFDL_ESM2G_r1i1p1 GFDL_ESM2M_r1i1p1 GISS_E2_H_CC_r1i1p1 GISS_E2_H_r1i1p1 GISS_E2_H_r1i1p2 GISS_E2_H_r1i1p3 GISS_E2_R_CC_r1i1p1 GISS_E2_R_r1i1p141 GISS_E2_R_r1i1p142 GISS_E2_R_r1i1p1 GISS_E2_R_r1i1p2 GISS_E2_R_r1i1p3 HadGEM2_CC_r1i1p1 HadGEM2_ES_r1i1p1 inmcm4_r1i1p1 IPSL_CM5A_LR_r1i1p1 IPSL_CM5A_MR_r1i1p1 IPSL_CM5B_LR_r1i1p1 MIROC4h_r1i1p1 MIROC5_r1i1p1 MIROC_ESM_CHEM_r1i1p1 MIROC_ESM_r1i1p1 MPI_ESM_LR_r1i1p1 MPI_ESM_MR_r1i1p1 MPI_ESM_P_r1i1p1 MRI_CGCM3_r1i1p1 NorESM1_ME_r1i1p1 NorESM1_M_r1i1p1
+#EC_EARTH_r1i1p1
+do
+
+for var in psl ts tas
+#ts tas
+do
+
+for seas in ann
+do
+
+
+if [ $model = "ACCESS1_0_r1i1p1" ];then
+
+cdo seltimestep,41/70 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+
+elif [ $model = "ACCESS1_3_r1i1p1" ];then
+
+cdo seltimestep,92/121 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+
+elif [ $model = "bcc_csm1_1_m_r1i1p1" ];then
+
+cdo seltimestep,262/291 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+
+elif [ $model = "bcc_csm1_1_r1i1p1" ];then
+
+cdo seltimestep,242/271 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+
+elif [ $model = "BNU_ESM_r1i1p1" ];then
+
+cdo seltimestep,402/431 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+
+elif [ $model = "CanESM2_r1i1p1" ];then
+
+cdo seltimestep,553/582 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+
+elif [ $model = "CCSM4_r1i1p1" ];then
+
+cdo seltimestep,505/534 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+
+elif [ $model = "CCSM4_r2i1p1" ];then
+
+cdo seltimestep,96/125 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+
+elif [ $model = "CCSM4_r3i1p1" ];then
+
+cdo seltimestep,23/52 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+
+elif [ $model = "CESM1_BGC_r1i1p1" ];then
+
+cdo seltimestep,186/215 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+
+elif [ $model = "CESM1_CAM5_r1i1p1" ];then
+
+cdo seltimestep,117/146 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+
+elif [ $model = "CESM1_FASTCHEM_r1i1p1" ];then
+
+cdo seltimestep,114/143 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+
+elif [ $model = "CESM1_WACCM_r1i1p1" ];then
+
+cdo seltimestep,126/155 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+
+elif [ $model = "CMCC_CESM_r1i1p1" ];then
+
+cdo seltimestep,57/86 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+
+elif [ $model = "CMCC_CM_r1i1p1" ];then
+
+cdo seltimestep,238/267 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+
+elif [ $model = "CMCC_CMS_r1i1p1" ];then
+
+cdo seltimestep,220/249 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+
+elif [ $model = "CNRM_CM5_2_r1i1p1" ];then
+
+cdo seltimestep,310/339 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+elif [ $model = "CNRM_CM5_r1i1p1" ];then
+
+cdo seltimestep,172/201 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+
+elif [ $model = "CSIRO_Mk3_6_0_r1i1p1" ];then
+
+cdo seltimestep,419/448 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+
+#elif [ $model = "EC_EARTH_r1i1p1" ];then
+
+#cdo seltimestep, ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+#cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+
+elif [ $model = "FGOALS_g2_r1i1p1" ];then
+
+cdo seltimestep,658/687 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+
+elif [ $model = "FGOALS_s2_r1i1p1" ];then
+
+cdo seltimestep,398/427 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+
+elif [ $model = "FIO_ESM_r1i1p1" ];then
+
+cdo seltimestep,48/77 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+
+elif [ $model = "GFDL_CM3_r1i1p1" ];then
+
+cdo seltimestep,329/358 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+
+elif [ $model = "GFDL_ESM2G_r1i1p1" ];then
+
+cdo seltimestep,380/409 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+
+elif [ $model = "GFDL_ESM2M_r1i1p1" ];then
+
+cdo seltimestep,78/107 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+
+elif [ $model = "GISS_E2_H_CC_r1i1p1" ];then
+
+cdo seltimestep,133/162 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+
+elif [ $model = "GISS_E2_H_r1i1p1" ];then
+
+cdo seltimestep,640/669 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+
+elif [ $model = "GISS_E2_H_r1i1p2" ];then
+
+cdo seltimestep,421/450 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+
+elif [ $model = "GISS_E2_H_r1i1p3" ];then
+
+cdo seltimestep,72/101 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+
+elif [ $model = "GISS_E2_R_CC_r1i1p1" ];then
+
+cdo seltimestep,60/89 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+
+elif [ $model = "GISS_E2_R_r1i1p141" ];then
+
+cdo seltimestep,799/828 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+
+elif [ $model = "GISS_E2_R_r1i1p142" ];then
+
+cdo seltimestep,14/43 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+
+elif [ $model = "GISS_E2_R_r1i1p1" ];then
+
+cdo seltimestep,20/49 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+
+elif [ $model = "GISS_E2_R_r1i1p2" ];then
+
+cdo seltimestep,10/39 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+
+elif [ $model = "GISS_E2_R_r1i1p3" ];then
+
+cdo seltimestep,309/338 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+
+elif [ $model = "HadGEM2_CC_r1i1p1" ];then
+
+cdo seltimestep,58/87 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+
+elif [ $model = "HadGEM2_ES_r1i1p1" ];then
+
+cdo seltimestep,12/41 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+
+elif [ $model = "inmcm4_r1i1p1" ];then
+
+cdo seltimestep,469/498 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+
+elif [ $model = "IPSL_CM5A_LR_r1i1p1" ];then
+
+cdo seltimestep,352/381 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+
+elif [ $model = "IPSL_CM5A_MR_r1i1p1" ];then
+
+cdo seltimestep,121/150 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+
+elif [ $model = "IPSL_CM5B_LR_r1i1p1" ];then
+
+cdo seltimestep,61/90 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+
+elif [ $model = "MIROC4h_r1i1p1" ];then
+
+cdo seltimestep,66/95 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+
+elif [ $model = "MIROC5_r1i1p1" ];then
+
+cdo seltimestep,234/263 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+
+elif [ $model = "MIROC_ESM_CHEM_r1i1p1" ];then
+
+cdo seltimestep,100/129 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+
+elif [ $model = "MIROC_ESM_r1i1p1" ];then
+
+cdo seltimestep,372/401 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+
+elif [ $model = "MPI_ESM_LR_r1i1p1" ];then
+
+cdo seltimestep,661/690 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+
+elif [ $model = "MPI_ESM_MR_r1i1p1" ];then
+
+cdo seltimestep,918/947 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+
+elif [ $model = "MPI_ESM_P_r1i1p1" ];then
+
+cdo seltimestep,66/95 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+
+elif [ $model = "MRI_CGCM3_r1i1p1" ];then
+
+cdo seltimestep,278/307 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+
+elif [ $model = "NorESM1_ME_r1i1p1" ];then
+
+cdo seltimestep,113/142 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+
+elif [ $model = "NorESM1_M_r1i1p1" ];then
+
+cdo seltimestep,32/61 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrpossammatch_slope.nc
+
+
+
+fi
+
+
+done
+done
+done
+
+

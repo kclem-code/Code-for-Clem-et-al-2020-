@@ -1,0 +1,93 @@
+#!/bin/sh
+
+ddir=/Volumes/kclem_backup/data1/CESM1.2.2/F1850C5.f19f19/data/vars
+rdir=/Volumes/kclem_backup/data4/kclem/CESM1.2.2/analysis/RWS
+cdir=/Volumes/kclem_backup/data1/CESM1.2.2/F1850C5.f19f19/data/climo/orig
+sdir=/Volumes/kclem_backup/data1/CESM1.2.2/F1850C5.f19f19/data/spcz/orig
+xdir=/Volumes/kclem_backup/data4/kclem/programs/EXEC
+
+
+for run in westpac2C
+do
+
+for seas in ann 1 2 3 4 5 6 7 8 9 10 11 12 DJF MAM JJA SON 
+do
+
+for var in TS Z250 totQadvect_925 meridTadvect_sfc meridTadvect_500 U_divergent_200 V_divergent_200 U_200 strmfnc_250_cdo U_500 V_500 diverg_200 tot_rws_200 TREFHT UBOT VBOT PRECT PSL Z500 PWAT
+do
+
+
+## calculate run minus climo and get significance
+cdo sub ${run}_${var}_${seas}_ltm.srv climo_${var}_${seas}_ltm.srv ${run}_${var}_${seas}_anom.srv
+
+cdo add ${run}_${var}_${seas}_var.srv climo_${var}_${seas}_var.srv num.srv
+cdo divc,2 num.srv spsq.srv
+cdo sqrt spsq.srv sp.srv
+cdo mulc,0.2582 sp.srv tdenom.srv  #.2582 = sqrt(0.0666666) = sqrt(1/30 + 1/30)
+cdo div ${run}_${var}_${seas}_anom.srv tdenom.srv ${run}_${var}_${seas}_tval.srv
+
+
+${xdir}/get_tval.x <<EOF
+&param file1="${run}_${var}_${seas}_tval.srv" file2="${run}_${var}_${seas}_sig.srv" dof=58 &end
+EOF
+
+done
+
+
+## filter vectors for divergent wind
+${xdir}/set_range_miss.x <<EOF
+&param file1="${run}_U_divergent_200_${seas}_anom.srv" file2="${run}_V_divergent_200_${seas}_anom.srv" file3="${run}_U_divergent_200_${seas}_sig.srv" file4="${run}_V_divergent_200_${seas}_sig.srv" file5="${run}_U_divergent_200_${seas}_sig_filt10pct.srv" file6="${run}_V_divergent_200_${seas}_sig_filt10pct.srv" thold=0.90 &end
+EOF
+
+
+## filter vectors for divergent wind 95%
+#${xdir}/set_range_miss.x <<EOF
+#&param file1="${run}_U_divergent_200_${seas}_anom.srv" file2="${run}_V_divergent_200_${seas}_anom.srv" file3="${run}_U_divergent_200_${seas}_sig.srv" file4="${run}_V_divergent_200_${seas}_sig.srv" file5="${run}_U_divergent_200_${seas}_sig_filt5pct.srv" file6="${run}_V_divergent_200_${seas}_sig_filt5pct.srv" thold=0.95 &end
+#EOF
+
+## filter vectors for 500 wind
+${xdir}/set_range_miss.x <<EOF
+&param file1="${run}_U_500_${seas}_anom.srv" file2="${run}_V_500_${seas}_anom.srv" file3="${run}_U_500_${seas}_sig.srv" file4="${run}_V_500_${seas}_sig.srv" file5="${run}_U_500_${seas}_sig_filt10pct.srv" file6="${run}_V_500_${seas}_sig_filt10pct.srv" thold=0.90 &end
+EOF
+
+## filter vectors for lowest model level wind
+${xdir}/set_range_miss.x <<EOF
+&param file1="${run}_UBOT_${seas}_anom.srv" file2="${run}_VBOT_${seas}_anom.srv" file3="${run}_UBOT_${seas}_sig.srv" file4="${run}_VBOT_${seas}_sig.srv" file5="${run}_UBOT_${seas}_sig_filt10pct.srv" file6="${run}_VBOT_${seas}_sig_filt10pct.srv" thold=0.90 &end
+EOF
+
+
+
+for var in TS Z250 totQadvect_925 meridTadvect_sfc meridTadvect_500 U_200 strmfnc_250_cdo diverg_200 tot_rws_200 TREFHT PRECT PSL Z500 PWAT U_500 V_500 UBOT VBOT
+do
+
+for wind in U_divergent_200 V_divergent_200 U_500 V_500 UBOT VBOT
+do
+
+for ifile in ${run}_${var}_${seas}_anom ${run}_${var}_${seas}_sig ${run}_${wind}_${seas}_sig_filt10pct 
+#${run}_${wind}_${seas}_sig_filt5pct
+do
+
+
+${xdir}/srv2grads2.x <<EOF
+&param file1="${ifile}.srv" file2="${ifile}.bin" &end
+EOF
+
+cat > ${ifile}.des <<EOF
+DSET ^${ifile}.bin
+TITLE ${run} ${var} ${mon}
+options sequential
+UNDEF -9e33
+XDEF 144 LINEAR 0 2.5
+YDEF 96 LINEAR -90 1.89473684
+ZDEF 1 LEVELS 1000
+TDEF 1 LINEAR Jan1979 1yr
+VARS 1
+var 1 99 ${var}
+ENDVARS
+EOF
+
+done
+done
+done
+done
+done

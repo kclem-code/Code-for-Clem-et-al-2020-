@@ -1,0 +1,175 @@
+#!/bin/sh
+
+pdir=/Volumes/kclem_backup/data4/kclem/training
+xdir=/Volumes/kclem_backup/data4/kclem/programs/EXEC
+
+for var in noaav5 500Z mslp
+#t2m 200Z 250Z 500Z 500.total mslp 500.merid sfc.total sfc.merid noaav5
+do
+
+
+for seas in ann 
+#MAM JJA SON DJF 
+#MJJAS
+do
+
+
+for time in 8918
+#7918
+do
+
+
+
+for index in iporesid
+do
+
+${xdir}/linear_congruency2D.x <<EOF
+&param file1="${var}_${time}_${seas}.srv" file2="${index}_${time}_${seas}.txt" file3="${var}_${time}_${seas}_slope.srv" file4="${var}_${time}_${seas}_sig.srv" file5="${var}_${time}_${seas}_cong_${index}.srv" file6="${var}_${time}_${seas}_resid_${index}.srv" &end
+EOF
+
+${xdir}/get_percentage.x <<EOF
+&param file1="${var}_${time}_${seas}_cong_${index}.srv" file2="${var}_${time}_${seas}_slope.srv" file3="${var}_${time}_${seas}_sig.srv" file4="${var}_${time}_${seas}_ratio_cong_${index}.srv" thold=0.90 &end 
+EOF
+
+
+
+
+for ifile in ${var}_${time}_${seas}_sig ${var}_${time}_${seas}_slope ${var}_${time}_${seas}_cong_${index} ${var}_${time}_${seas}_resid_${index} ${var}_${time}_${seas}_ratio_cong_${index}
+do
+
+if [ $var = "hadsst" ] || [ $var = "hadice" ];then
+
+${xdir}/srv2grads2.x <<EOF 
+&param file1="${ifile}.srv" file2="${ifile}.bin" &end
+EOF
+
+cat > ${ifile}.des <<EOF
+DSET ^${ifile}.bin
+TITLE ${var} ${seas}
+options sequential
+UNDEF -9e33
+XDEF 360 LINEAR -179.5 1
+YDEF 180 LINEAR -89.5 1
+ZDEF 1 LEVELS 1000
+TDEF 1 LINEAR Jan1979 1yr
+VARS 1
+var 1 99 ${var}
+ENDVARS
+EOF
+
+
+elif [ $var = "noaav5" ];then
+
+${xdir}/srv2grads2.x <<EOF 
+&param file1="${ifile}.srv" file2="${ifile}.bin" &end
+EOF
+
+cat > ${ifile}.des <<EOF
+DSET ^${ifile}.bin
+TITLE ${var} ${seas}
+options sequential
+UNDEF -9e33
+XDEF 180 LINEAR 0 2
+YDEF 89 LINEAR -88 2
+ZDEF 1 LEVELS 1000
+TDEF 1 LINEAR Jan1979 1yr
+VARS 1
+var 1 99 ${var}
+ENDVARS
+EOF
+
+
+elif [ $var = "250div" ] || [ $var = "olr" ] || [ $var = "950div" ];then
+
+${xdir}/srv2grads2.x <<EOF 
+&param file1="${ifile}.srv" file2="${ifile}.bin" &end
+EOF
+
+cat > ${ifile}.des <<EOF
+DSET ^${ifile}.bin
+TITLE ${var} ${seas}
+options sequential
+UNDEF -9e33
+XDEF 144 LINEAR 0 2.5
+YDEF 73 LINEAR -90 2.5
+ZDEF 1 LEVELS 1000
+TDEF 1 LINEAR Jan1979 1yr
+VARS 1
+var 1 99 ${var}
+ENDVARS
+EOF
+
+
+elif [ $var = "uwnd" ] || [ $var = "vvel" ] || [ $var = "air" ] || [ $var = "div" ];then
+
+./srv2grads_invertlev.x <<EOF 
+&param file1="${ifile}.srv" file2="${ifile}.bin" nlev=37 ntim=1 &end
+EOF
+
+
+cat > ${ifile}.des <<EOF
+DSET ^${ifile}.bin
+TITLE ${var} ${seas}
+options sequential
+UNDEF -9e33
+XDEF 240 LINEAR 0 1.5
+YDEF 121 LINEAR -90 1.5
+ZDEF 37 LEVELS 1000 975 950 925 900 875 850 825 800 775 750 700 650 600 550 500 450 400 350 300 250 225 200 175 150 125 100 70 50 30 20 10 7 5 3 2 1
+TDEF 1 LINEAR Jan1979 1yr
+VARS 1
+var 37 99 ${var}
+ENDVARS
+EOF
+
+
+elif [ $var = "uwnd_eq_merid_avg" ] || [ $var = "vvel_eq_merid_avg" ] || [ $var = "air_eq_merid_avg" ] || [ $var = "div_eq_merid_avg" ];then
+
+./srv2grads_invertlev.x <<EOF 
+&param file1="${ifile}.srv" file2="${ifile}.bin" nlev=37 ntim=1 &end
+EOF
+
+
+cat > ${ifile}.des <<EOF
+DSET ^${ifile}.bin
+TITLE ${var} ${seas}
+options sequential
+UNDEF -9e33
+XDEF 240 LINEAR 0 1.5
+YDEF 1 LINEAR 0 1
+ZDEF 37 LEVELS 1000 975 950 925 900 875 850 825 800 775 750 700 650 600 550 500 450 400 350 300 250 225 200 175 150 125 100 70 50 30 20 10 7 5 3 2 1
+TDEF 1 LINEAR Jan1979 1yr
+VARS 1
+var 37 99 ${var}
+ENDVARS
+EOF
+
+
+else
+
+${xdir}/srv2grads2.x <<EOF 
+&param file1="${ifile}.srv" file2="${ifile}.bin" &end
+EOF
+
+cat > ${ifile}.des <<EOF
+DSET ^${ifile}.bin
+TITLE ${var} ${seas}
+options sequential
+UNDEF -9e33
+XDEF 240 LINEAR 0 1.5
+YDEF 121 LINEAR -90 1.5
+ZDEF 1 LEVELS 1000
+TDEF 1 LINEAR Jan1979 1yr
+VARS 1
+var 1 99 ${var}
+ENDVARS
+EOF
+
+fi
+
+done #ifile
+done #index
+done #seas
+done #time
+done #var
+
+

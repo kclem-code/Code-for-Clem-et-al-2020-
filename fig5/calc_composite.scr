@@ -1,0 +1,214 @@
+#!/bin/sh
+
+ddir=/Volumes/kclem_backup/data4/kclem/postdoc/south_pole/composites_spwarm
+xdir=/Volumes/kclem_backup/data4/kclem/programs/EXEC
+
+for var in u500 v500 200Z 250Z 500Z mslp 500.merid 500.total sfc.merid sfc.total noaav5 olr pwat tcc t2m hadice
+do
+
+for seas in ann 
+#MAM JJA SON
+do
+
+
+## CALC COMPOSITES FOR -IPO(<0.12)/+SAM 14 YEARS
+cdo selyear,2015,1999,2010,2008,2012,2018,2016,2017,2001,2004,2005,2011,2013,2009 ${ddir}/${var}_${seas}_anom.srv ${var}_${seas}_negipopossam.srv
+cdo timmean ${var}_${seas}_negipopossam.srv ${var}_${seas}_negipopossam_anom.srv
+cdo timstd ${var}_${seas}_negipopossam.srv ${var}_${seas}_negipopossam_stdev.srv
+cdo divc,3.742 ${var}_${seas}_negipopossam_stdev.srv ${var}_${seas}_negipopossam_denom.srv #3.742 = sqrt(n) = sqrt(14)
+cdo div ${var}_${seas}_negipopossam_anom.srv ${var}_${seas}_negipopossam_denom.srv ${var}_${seas}_negipopossam_tval.srv
+
+
+## CALC COMPOSITES FOR +IPO(>0.12)/+SAM 6 YEARS
+cdo selyear,1983,1993,1995,1985,1979,1998 ${ddir}/${var}_${seas}_anom.srv ${var}_${seas}_posipopossam.srv
+cdo timmean ${var}_${seas}_posipopossam.srv ${var}_${seas}_posipopossam_anom.srv
+cdo timstd ${var}_${seas}_posipopossam.srv ${var}_${seas}_posipopossam_stdev.srv
+cdo divc,2.449 ${var}_${seas}_posipopossam_stdev.srv ${var}_${seas}_posipopossam_denom.srv #2.449 = sqrt(n) = sqrt(6)
+cdo div ${var}_${seas}_posipopossam_anom.srv ${var}_${seas}_posipopossam_denom.srv ${var}_${seas}_posipopossam_tval.srv
+
+
+
+for comp in negipopossam posipopossam
+do
+
+if [ $comp = "negipopossam" ];then
+
+## GET SIGNIFICANCE (DOF=N-1)
+${xdir}/get_tval.x <<EOF
+&param file1="${var}_${seas}_${comp}_tval.srv" file2="${var}_${seas}_${comp}_sig.srv" dof=13 &end
+EOF
+
+elif [ $comp = "posipopossam" ];then
+
+## GET SIGNIFICANCE (DOF=N-1)
+${xdir}/get_tval.x <<EOF
+&param file1="${var}_${seas}_${comp}_tval.srv" file2="${var}_${seas}_${comp}_sig.srv" dof=5 &end
+EOF
+
+fi
+
+
+## CALC DIFFERENCE BETWEEN -IPO/+SAM VS +IPO/+SAM
+#------------------------------------------------
+
+## GET -IPO/+SAM
+cdo selyear,2015,1999,2010,2008,2012,2018,2016,2017,2001,2004,2005,2011,2013,2009 ${ddir}/${var}_7918_${seas}.srv ${var}_${seas}_negipopossam_years.srv
+cdo timmean ${var}_${seas}_negipopossam_years.srv ${var}_${seas}_negipopossam_avg.srv
+cdo timvar ${var}_${seas}_negipopossam_years.srv ${var}_${seas}_negipopossam_var.srv
+
+## GET +IPO/+SAM
+cdo selyear,1983,1993,1995,1985,1979,1998 ${ddir}/${var}_7918_${seas}.srv ${var}_${seas}_posipopossam_years.srv
+cdo timmean ${var}_${seas}_posipopossam_years.srv ${var}_${seas}_posipopossam_avg.srv
+cdo timvar ${var}_${seas}_posipopossam_years.srv ${var}_${seas}_posipopossam_var.srv
+
+
+## CALC DIFFERENCE
+cdo sub ${var}_${seas}_negipopossam_avg.srv ${var}_${seas}_posipopossam_avg.srv ${var}_${seas}_negipopossam_min_posipopossam.srv
+
+## (n-1)*(variance group1), n=14
+cdo mulc,13 ${var}_${seas}_negipopossam_var.srv ${var}_${seas}_negipopossam_multivar.srv
+
+## (m-1)*(variance group2), m=6
+cdo mulc,5 ${var}_${seas}_posipopossam_var.srv ${var}_${seas}_posipopossam_multivar.srv
+
+## add two multivars for numerator
+cdo add ${var}_${seas}_negipopossam_multivar.srv ${var}_${seas}_posipopossam_multivar.srv num.srv
+
+## divide by n+m-2 (14+6-2=18)
+cdo divc,18 num.srv spsq.srv
+
+## square root
+cdo sqrt spsq.srv sp.srv
+
+## multiply by sqrt(1/n + 1/m)
+cdo mulc,0.488 sp.srv tdenom.srv  #.488=sqrt(0.2381)=sqrt(1/14 + 1/6)
+
+
+## divide group difference by denom to get tvalue
+cdo div ${var}_${seas}_negipopossam_min_posipopossam.srv tdenom.srv ${var}_${seas}_negipopossam_min_posipopossam_tval.srv
+
+## dof=n+m-2=14+6-2=18
+${xdir}/get_tval.x <<EOF
+&param file1="${var}_${seas}_negipopossam_min_posipopossam_tval.srv" file2="${var}_${seas}_negipopossam_min_posipopossam_sig.srv" dof=18 &end
+EOF
+
+
+for diff in negipopossam_min_posipopossam
+do
+
+for ifile in ${var}_${seas}_${comp}_anom ${var}_${seas}_${comp}_sig ${var}_${seas}_${diff} ${var}_${seas}_${diff}_sig 
+do
+
+if [ $var = "hadsst" ] || [ $var = "hadice" ];then
+
+${xdir}/srv2grads2.x <<EOF 
+&param file1="${ifile}.srv" file2="${ifile}.bin" &end
+EOF
+
+cat > ${ifile}.des <<EOF
+DSET ^${ifile}.bin
+TITLE ${var} ${var2}
+options sequential
+UNDEF -9e33
+XDEF 360 LINEAR -179.5 1
+YDEF 180 LINEAR -89.5 1
+ZDEF 1 LEVELS 1000
+TDEF 1 LINEAR Jan1979 1yr
+VARS 1
+var 1 99 ${var}
+ENDVARS
+EOF
+
+elif [ $var = "noaav5" ];then
+
+${xdir}/srv2grads2.x <<EOF 
+&param file1="${ifile}.srv" file2="${ifile}.bin" &end
+EOF
+
+cat > ${ifile}.des <<EOF
+DSET ^${ifile}.bin
+TITLE ${var} ${var2}
+options sequential
+UNDEF -9e33
+XDEF 180 LINEAR 0 2
+YDEF 89 LINEAR -88 2
+ZDEF 1 LEVELS 1000
+TDEF 1 LINEAR Jan1979 1yr
+VARS 1
+var 1 99 ${var}
+ENDVARS
+EOF
+
+
+elif [ $var = "250div" ] || [ $var = "olr" ];then
+
+${xdir}/srv2grads2.x <<EOF 
+&param file1="${ifile}.srv" file2="${ifile}.bin" &end
+EOF
+
+cat > ${ifile}.des <<EOF
+DSET ^${ifile}.bin
+TITLE ${var} ${var2}
+options sequential
+UNDEF -9e33
+XDEF 144 LINEAR 0 2.5
+YDEF 73 LINEAR -90 2.5
+ZDEF 1 LEVELS 1000
+TDEF 1 LINEAR Jan1979 1yr
+VARS 1
+var 1 99 ${var}
+ENDVARS
+EOF
+
+
+elif [ $var = "uwnd" ] || [ $var = "vvel" ] || [ $var = "air" ];then
+
+${xdir}/srv2grads_invertlev.x <<EOF 
+&param file1="${ifile}.srv" file2="${ifile}.bin" nlev=37 ntim=1 &end
+EOF
+
+
+cat > ${ifile}.des <<EOF
+DSET ^${ifile}.bin
+TITLE ${var} ${var2}
+options sequential
+UNDEF -9e33
+XDEF 240 LINEAR 0 1.5
+YDEF 121 LINEAR -90 1.5
+ZDEF 37 LEVELS 1000 975 950 925 900 875 850 825 800 775 750 700 650 600 550 500 450 400 350 300 250 225 200 175 150 125 100 70 50 30 20 10 7 5 3 2 1
+TDEF 1 LINEAR Jan1979 1yr
+VARS 1
+var 37 99 ${var}
+ENDVARS
+EOF
+
+
+else
+
+${xdir}/srv2grads2.x <<EOF 
+&param file1="${ifile}.srv" file2="${ifile}.bin" &end
+EOF
+
+cat > ${ifile}.des <<EOF
+DSET ^${ifile}.bin
+TITLE ${var} ${var2}
+options sequential
+UNDEF -9e33
+XDEF 240 LINEAR 0 1.5
+YDEF 121 LINEAR -90 1.5
+ZDEF 1 LEVELS 1000
+TDEF 1 LINEAR Jan1979 1yr
+VARS 1
+var 1 99 ${var}
+ENDVARS
+EOF
+
+fi
+
+
+done #ifile
+done #diff
+done #comp
+done #seas
+done #var
+

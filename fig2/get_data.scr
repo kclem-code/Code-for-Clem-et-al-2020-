@@ -1,0 +1,117 @@
+#!/bin/sh
+
+ddir=/Volumes/kclem_backup/data1/ERA5/1.5x1.5/surface
+cdir=/Volumes/kclem_backup/data1/ERA5/1.5x1.5/pressure
+odir=/Volumes/kclem_backup/data1/OLR
+ndir=/Volumes/kclem_backup/data1/SST/NOAA
+idir=/Volumes/kclem_backup/data1/sea_ice/monthly
+pdir=/Volumes/kclem_backup/data4/kclem/training
+xdir=/Volumes/kclem_backup/data4/kclem/programs/EXEC
+
+
+## GET SST NOAAV5 79-18
+cdo splitseas -invertlat -seasmean -seldate,19790300,20190232 ${ndir}/ersstv5.mon.mean.srv noaav5_7918_
+
+cdo invertlat -yearmean -seldate,19790100,20181232 ${ndir}/ersstv5.mon.mean.srv noaav5_7918_ann.srv
+
+
+## GET HADLEY SEA ICE 79-18
+cdo splitseas -invertlat -mulc,100 -seasmean -seldate,19790300,20190232 ${idir}/hadley.ice.con.mon.mean.srv hadice_7918_
+
+cdo invertlat -mulc,100 -yearmean -seldate,19790100,20181232 ${idir}/hadley.ice.con.mon.mean.srv hadice_7918_ann.srv
+
+
+## GET OLR 79-18
+cdo -f srv splitseas -invertlat -seasmean -seldate,19790300,20181132 ${odir}/olr.mon.mean.nc olr_7918_
+
+cdo -f srv invertlat -yearmean -seldate,19790100,20181232 ${odir}/olr.mon.mean.nc olr_7918_ann.srv
+
+
+## GET ERA5 TOTAL PRECP 79-18
+cdo -f srv splitseas -invertlat -mulc,1000 -seasmean -seldate,19790300,20190232 ${ddir}/era5.tot.precip.mon.mean.nc totpr_7918_
+
+cdo -f srv invertlat -mulc,1000 -yearmean -seldate,19790100,20181232 ${ddir}/era5.tot.precip.mon.mean.nc totpr_7918_ann.srv
+
+
+## GET ERA5 T2M 79-18
+cdo -f srv splitseas -invertlat -seasmean -seldate,19790300,20190232 ${ddir}/era5.air.2m.mon.mean.nc t2m_7918_
+
+cdo -f srv invertlat -yearmean -seldate,19790100,20181232 ${ddir}/era5.air.2m.mon.mean.nc t2m_7918_ann.srv
+
+
+## GET ERA5 10M WINDS 79-18
+for var in u v
+do
+
+cdo -f srv splitseas -invertlat -seasmean -seldate,19790300,20190232 ${ddir}/era5.${var}wnd.10m.mon.mean.nc ${var}10m_7918_
+
+cdo -f srv invertlat -yearmean -seldate,19790100,20181232 ${ddir}/era5.${var}wnd.10m.mon.mean.nc ${var}10m_7918_ann.srv
+
+done
+
+
+## GET ERA5 MSLP 79-18
+cdo -f srv splitseas -invertlat -divc,100 -seasmean -seldate,19790300,20190232 ${ddir}/era5.mslp.mon.mean.nc mslp_7918_
+
+cdo -f srv invertlat -divc,100 -yearmean -seldate,19790100,20181232 ${ddir}/era5.mslp.mon.mean.nc mslp_7918_ann.srv
+
+
+## GET ERA5 PRECIP WATER 79-18
+cdo -f srv splitseas -invertlat -seasmean -seldate,19790300,20190232 ${ddir}/era5.pwat.mon.mean.nc pwat_7918_
+
+cdo -f srv invertlat -yearmean -seldate,19790100,20181232 ${ddir}/era5.pwat.mon.mean.nc pwat_7918_ann.srv
+
+
+## GET ERA5 DOWN THERM RADIATION 79-18
+cdo -f srv splitseas -invertlat -seasmean -seldate,19790300,20190232 ${ddir}/era5.lw.down.mon.mean.nc dlw_7918_
+
+cdo -f srv invertlat -yearmean -seldate,19790100,20181232 ${ddir}/era5.lw.down.mon.mean.nc dlw_7918_ann.srv
+
+
+## GET ERA5 500 WINDS 79-18
+for var in u v
+do
+
+cdo -f srv splitseas -invertlat -seasmean -seldate,19790300,20190232 -sellevel,500 ${cdir}/era5.${var}wnd.mon.mean.nc ${var}500_7918_
+
+cdo -f srv invertlat -yearmean -seldate,19790100,20181232 -sellevel,500 ${cdir}/era5.${var}wnd.mon.mean.nc ${var}500_7918_ann.srv
+
+done
+
+
+for lev in 500 250 200
+do
+
+## GET ERA5 GEOPOT HEIGHTS 79-18
+cdo -f srv splitseas -invertlat -divc,9.81 -seasmean -seldate,19790300,20190232 -sellevel,${lev} ${cdir}/era5.geopot.mon.mean.nc ${lev}Z_7918_
+
+cdo -f srv invertlat -divc,9.81 -yearmean -seldate,19790100,20181232 -sellevel,${lev} ${cdir}/era5.geopot.mon.mean.nc ${lev}Z_7918_ann.srv
+
+done
+
+
+for var in total merid
+do
+
+## GET ERA5 500 ADVECTION 79-18
+cdo -f srv splitseas -invertlat -mulc,86400 -seasmean -seldate,19790300,20190232 ${cdir}/era5.500.${var}.advect.mon.mean.nc 500.${var}_7918_
+
+cdo -f srv invertlat -mulc,86400 -yearmean -seldate,19790100,20181232 ${cdir}/era5.500.${var}.advect.mon.mean.nc 500.${var}_7918_ann.srv
+
+
+## GET ERA5 SURFACE ADVECTION 79-18
+cdo -f srv splitseas -invertlat -mulc,86400 -seasmean -seldate,19790300,20190232 ${ddir}/era5.sfc.${var}.advect.mon.mean.nc sfc.${var}_7918_
+
+cdo -f srv invertlat -mulc,86400 -yearmean -seldate,19790100,20181232 ${ddir}/era5.sfc.${var}.advect.mon.mean.nc sfc.${var}_7918_ann.srv
+
+done
+
+
+
+
+
+
+
+
+
+

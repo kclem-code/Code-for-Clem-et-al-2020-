@@ -1,0 +1,67 @@
+#!/bin/sh
+
+xdir=/Volumes/kclem_backup/data4/kclem/programs/EXEC
+
+for seas in ann
+#MAM JJA SON DJF ann
+do
+
+for lev in 500
+#10m 500
+do
+
+for comp in negipopossam posipopossam
+do
+
+## filter vectors for divergent wind
+${xdir}/set_range_miss.x <<EOF
+&param file1="u${lev}_${seas}_${comp}_anom.srv" file2="v${lev}_${seas}_${comp}_anom.srv" file3="u${lev}_${seas}_${comp}_sig.srv" file4="v${lev}_${seas}_${comp}_sig.srv" file5="u${lev}_${seas}_${comp}_sig_filt10pct.srv" file6="v${lev}_${seas}_${comp}_sig_filt10pct.srv" thold=0.90 &end
+EOF
+
+
+for diff in negipopossam_min_posipopossam
+do
+
+## filter vectors for wind
+${xdir}/set_range_miss.x <<EOF
+&param file1="u${lev}_${seas}_${diff}.srv" file2="v${lev}_${seas}_${diff}.srv" file3="u${lev}_${seas}_${diff}_sig.srv" file4="v${lev}_${seas}_${diff}_sig.srv" file5="u${lev}_${seas}_${diff}_sig_filt10pct.srv" file6="v${lev}_${seas}_${diff}_sig_filt10pct.srv" thold=0.90 &end
+EOF
+
+
+for var in u v
+do
+
+cdo setcindexbox,-9e33,1,240,1,1 ${var}${lev}_${seas}_${diff}_sig_filt10pct.srv ${var}${lev}_${seas}_${diff}_sig_filt10pct_nosp.srv
+
+cdo setcindexbox,-9e33,1,240,1,1 ${var}${lev}_${seas}_${comp}_sig_filt10pct.srv ${var}${lev}_${seas}_${comp}_sig_filt10pct_nosp.srv
+
+
+
+for ifile in ${var}${lev}_${seas}_${comp}_sig_filt10pct_nosp ${var}${lev}_${seas}_${diff}_sig_filt10pct_nosp
+do
+
+${xdir}/srv2grads2.x <<EOF 
+&param file1="${ifile}.srv" file2="${ifile}.bin" &end
+EOF
+
+cat > ${ifile}.des <<EOF
+DSET ^${ifile}.bin
+TITLE ${seas} ${lev}
+options sequential
+UNDEF -9e33
+XDEF 240 LINEAR 0 1.5
+YDEF 121 LINEAR -90 1.5
+ZDEF 1 LEVELS 1000
+TDEF 1 LINEAR Jan1979 1yr
+VARS 1
+var 1 99 ${lev}
+ENDVARS
+EOF
+
+done
+done
+done
+done
+done
+done
+

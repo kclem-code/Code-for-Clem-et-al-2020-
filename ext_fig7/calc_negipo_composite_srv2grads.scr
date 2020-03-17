@@ -1,0 +1,63 @@
+#!/bin/sh
+
+ddir=/Volumes/kclem_backup/data1/CMIP5/picontrol_seas_data
+xdir=/Volumes/kclem_backup/data4/kclem/programs/EXEC
+
+
+for var in psl ts tas
+#ts tas
+do
+
+for seas in ann
+do
+
+## get the multi-model mean trend for negative ipo trend that had a positive SST trend in the western tropical Pacific and negative SST trend in the eastern troical Pacific following the observed negative IPO SST pattern (i.e., the full multi-model mean negative IPO pattern in the CMIP5 models shows strong cooling across the entire tropical south and equatorial Pacific, all the way to Papua New Gunea/150E which is not representative of the observed negative IPO pattern and the trend that occurred during the South Pole warming period).
+
+
+## get mean of neg ipo with wpac warm, epac cold 14
+cdo ensmean ${var}_piControl_Amon_GISS_E2_R_r1i1p142_${seas}_30yrnegipores_slope.nc ${var}_piControl_Amon_FGOALS_s2_r1i1p1_${seas}_30yrnegipores_slope.nc ${var}_piControl_Amon_CESM1_BGC_r1i1p1_${seas}_30yrnegipores_slope.nc ${var}_piControl_Amon_GISS_E2_R_r1i1p3_${seas}_30yrnegipores_slope.nc ${var}_piControl_Amon_GFDL_ESM2G_r1i1p1_${seas}_30yrnegipores_slope.nc ${var}_piControl_Amon_CMCC_CESM_r1i1p1_${seas}_30yrnegipores_slope.nc ${var}_piControl_Amon_CNRM_CM5_r1i1p1_${seas}_30yrnegipores_slope.nc ${var}_piControl_Amon_GISS_E2_R_r1i1p1_${seas}_30yrnegipores_slope.nc ${var}_piControl_Amon_IPSL_CM5B_LR_r1i1p1_${seas}_30yrnegipores_slope.nc ${var}_piControl_Amon_CCSM4_r2i1p1_${seas}_30yrnegipores_slope.nc ${var}_piControl_Amon_CCSM4_r3i1p1_${seas}_30yrnegipores_slope.nc ${var}_piControl_Amon_CESM1_FASTCHEM_r1i1p1_${seas}_30yrnegipores_slope.nc ${var}_piControl_Amon_MIROC4h_r1i1p1_${seas}_30yrnegipores_slope.nc ${var}_piControl_Amon_NorESM1_ME_r1i1p1_${seas}_30yrnegipores_slope.nc ${var}_piControl_Amon_wpacwarmepaccold_${seas}_30yrnegipores_slope.nc
+
+
+
+for model in wpacwarmepaccold 
+do
+
+
+
+cdo -f srv copy ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.srv
+
+#cdo -f srv copy ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.srv
+
+
+for var2 in slope 
+#anom
+do
+
+for ifile in ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_${var2}
+do
+
+${xdir}/srv2grads2.x <<EOF
+&param file1="${ifile}.srv" file2="${ifile}.bin" &end
+EOF
+
+cat > ${ifile}.des <<EOF
+DSET ^${ifile}.bin
+TITLE ${var} ${var3}
+options sequential
+UNDEF -9e33
+XDEF 180 LINEAR 0 2
+YDEF 91 LINEAR -90 2
+ZDEF 1 LEVELS 1000
+TDEF 1 LINEAR Jan1979 1yr
+VARS 1
+var 1 99 ${var}
+ENDVARS
+EOF
+
+done
+done
+done
+done
+done
+
+

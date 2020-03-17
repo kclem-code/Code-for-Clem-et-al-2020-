@@ -1,0 +1,162 @@
+#!/bin/sh
+
+ddir=/Volumes/kclem_backup/data1/CESM1.2.2/F1850C5.f19f19/data/vars
+rdir=/Volumes/kclem_backup/data4/kclem/CESM1.2.2/analysis/RWS
+xdir=/Volumes/kclem_backup/data4/kclem/programs/EXEC
+
+odir=/Volumes/kclem_backup/data1/CESM1.2.2/F1850C5.f19f19/data/orig
+
+sdir=/Volumes/kclem_backup/data1/CESM1.2.2/F1850C5.f19f19/data/orig/spcz.full2C
+34cdir=/Volumes/kclem_backup/data1/CESM1.2.2/F1850C5.f19f19/data/orig/nino34.cold2C
+
+
+
+for run in climo westpac2C
+do
+
+## ddir .nc variables
+#-------------------------
+for var1 in U_divergent_200 V_divergent_200 U_200 strmfnc_250_cdo U_500 V_500
+do
+
+for mon in 1 2 3 4 5 6 7 8 9 10 11 12
+do
+
+## get ddir .nc monthly 30-year ltm and variance
+cdo -f srv timmean -selmon,${mon} -seldate,00020100,00311232 ${ddir}/${run}_${var1}.nc ${run}_${var1}_${mon}_ltm.srv
+cdo -f srv timvar -selmon,${mon} -seldate,00020100,00311232 ${ddir}/${run}_${var1}.nc ${run}_${var1}_${mon}_var.srv
+
+done #mon
+
+## get ddir .nc DJF 30-year ltm and variance
+cdo -f srv timmean -yearmean -selmon,1,2,3 -seldate,00020100,00311232 ${ddir}/${run}_${var1}.nc ${run}_${var1}_DJF_ltm.srv
+cdo -f srv timvar -yearmean -selmon,1,2,3 -seldate,00020100,00311232 ${ddir}/${run}_${var1}.nc ${run}_${var1}_DJF_var.srv
+
+## get ddir .nc MAM 30-year ltm and variance
+cdo -f srv timmean -yearmean -selmon,4,5,6 -seldate,00020100,00311232 ${ddir}/${run}_${var1}.nc ${run}_${var1}_MAM_ltm.srv
+cdo -f srv timvar -yearmean -selmon,4,5,6 -seldate,00020100,00311232 ${ddir}/${run}_${var1}.nc ${run}_${var1}_MAM_var.srv
+
+## get ddir .nc JJA 30-year ltm and variance
+cdo -f srv timmean -yearmean -selmon,7,8,9 -seldate,00020100,00311232 ${ddir}/${run}_${var1}.nc ${run}_${var1}_JJA_ltm.srv
+cdo -f srv timvar -yearmean -selmon,7,8,9 -seldate,00020100,00311232 ${ddir}/${run}_${var1}.nc ${run}_${var1}_JJA_var.srv
+
+## get ddir .nc SON 30-year ltm and variance
+cdo -f srv timmean -yearmean -selmon,10,11,12 -seldate,00020100,00311232 ${ddir}/${run}_${var1}.nc ${run}_${var1}_SON_ltm.srv
+cdo -f srv timvar -yearmean -selmon,10,11,12 -seldate,00020100,00311232 ${ddir}/${run}_${var1}.nc ${run}_${var1}_SON_var.srv
+
+done #var1
+
+
+
+## ddir .srv variables
+#-------------------------
+for var2 in totQadvect_925 meridTadvect_sfc meridTadvect_500 diverg_200 tot_rws_200
+do
+
+for mon in 1 2 3 4 5 6 7 8 9 10 11 12
+do
+
+## get ddir .srv monthly 30-year ltm and variance
+cdo timmean -selmon,${mon} -seldate,00020100,00311232 ${ddir}/${run}_${var2}.srv ${run}_${var2}_${mon}_ltm.srv
+cdo timvar -selmon,${mon} -seldate,00020100,00311232 ${ddir}/${run}_${var2}.srv ${run}_${var2}_${mon}_var.srv
+
+done #mon
+
+## get ddir .srv DJF 30-year ltm and variance
+cdo timmean -yearmean -selmon,1,2,3 -seldate,00020100,00311232 ${ddir}/${run}_${var2}.srv ${run}_${var2}_DJF_ltm.srv
+cdo timvar -yearmean -selmon,1,2,3 -seldate,00020100,00311232 ${ddir}/${run}_${var2}.srv ${run}_${var2}_DJF_var.srv
+
+## get ddir .srv MAM 30-year ltm and variance
+cdo timmean -yearmean -selmon,4,5,6 -seldate,00020100,00311232 ${ddir}/${run}_${var2}.srv ${run}_${var2}_MAM_ltm.srv
+cdo timvar -yearmean -selmon,4,5,6 -seldate,00020100,00311232 ${ddir}/${run}_${var2}.srv ${run}_${var2}_MAM_var.srv
+
+## get ddir .srv JJA 30-year ltm and variance
+cdo timmean -yearmean -selmon,7,8,9 -seldate,00020100,00311232 ${ddir}/${run}_${var2}.srv ${run}_${var2}_JJA_ltm.srv
+cdo timvar -yearmean -selmon,7,8,9 -seldate,00020100,00311232 ${ddir}/${run}_${var2}.srv ${run}_${var2}_JJA_var.srv
+
+## get ddir .srv SON 30-year ltm and variance
+cdo timmean -yearmean -selmon,10,11,12 -seldate,00020100,00311232 ${ddir}/${run}_${var2}.srv ${run}_${var2}_SON_ltm.srv
+cdo timvar -yearmean -selmon,10,11,12 -seldate,00020100,00311232 ${ddir}/${run}_${var2}.srv ${run}_${var2}_SON_var.srv
+
+done #var2
+
+
+## original model .nc variables
+#----------------------------------------
+for var3 in TS TREFHT UBOT VBOT PRECT PSL Z500 Z250 PWAT
+do
+
+
+## get model variables
+#---------------------
+for mon in 1 2 3 4 5 6 7 8 9 10 11 12
+do
+
+## get climo .nc monthly 30-year ltm and variance
+cdo -f srv timmean -selmon,${mon} -seldate,00020100,00311232 ${odir}/${run}/${var3}.${run}.nc ${run}_${var3}_${mon}_ltm.srv
+cdo -f srv timvar -selmon,${mon} -seldate,00020100,00311232 ${odir}/${run}/${var3}.${run}.nc ${run}_${var3}_${mon}_var.srv
+
+done #mon
+
+## get model .nc DJF 30-year ltm and variance
+cdo -f srv timmean -yearmean -selmon,1,2,3 -seldate,00020100,00311232 ${odir}/${run}/${var3}.${run}.nc ${run}_${var3}_DJF_ltm.srv
+cdo -f srv timvar -yearmean -selmon,1,2,3 -seldate,00020100,00311232 ${odir}/${run}/${var3}.${run}.nc ${run}_${var3}_DJF_var.srv
+
+## get model .nc MAM 30-year ltm and variance
+cdo -f srv timmean -yearmean -selmon,4,5,6 -seldate,00020100,00311232 ${odir}/${run}/${var3}.${run}.nc ${run}_${var3}_MAM_ltm.srv
+cdo -f srv timvar -yearmean -selmon,4,5,6 -seldate,00020100,00311232 ${odir}/${run}/${var3}.${run}.nc ${run}_${var3}_MAM_var.srv
+
+## get model .nc JJA 30-year ltm and variance
+cdo -f srv timmean -yearmean -selmon,7,8,9 -seldate,00020100,00311232 ${odir}/${run}/${var3}.${run}.nc ${run}_${var3}_JJA_ltm.srv
+cdo -f srv timvar -yearmean -selmon,7,8,9 -seldate,00020100,00311232 ${odir}/${run}/${var3}.${run}.nc ${run}_${var3}_JJA_var.srv
+
+## get model .nc SON 30-year ltm and variance
+cdo -f srv timmean -yearmean -selmon,10,11,12 -seldate,00020100,00311232 ${odir}/${run}/${var3}.${run}.nc ${run}_${var3}_SON_ltm.srv
+cdo -f srv timvar -yearmean -selmon,10,11,12 -seldate,00020100,00311232 ${odir}/${run}/${var3}.${run}.nc ${run}_${var3}_SON_var.srv
+
+
+
+done #var3
+done #run
+
+
+
+
+## convert select ltm variables to grads
+#---------------------------------------
+
+for run in climo westpac2C
+do
+
+for var in PRECT
+#U_divergent_200 V_divergent_200 U_200 diverg_200 tot_rws_200 PRECT
+do
+
+for mon in 1 2 3 4 5 6 7 8 9 10 11 12 DJF MAM JJA SON
+do
+
+for ifile in ${run}_${var}_${mon}_ltm
+do
+
+${xdir}/srv2grads2.x <<EOF
+&param file1="${ifile}.srv" file2="${ifile}.bin" &end
+EOF
+
+cat > ${ifile}.des <<EOF
+DSET ^${ifile}.bin
+TITLE ${run} ${var} ${mon}
+options sequential
+UNDEF -9e33
+XDEF 144 LINEAR 0 2.5
+YDEF 96 LINEAR -90 1.89473684
+ZDEF 1 LEVELS 1000
+TDEF 1 LINEAR Jan1979 1yr
+VARS 1
+var 1 99 ${var}
+ENDVARS
+EOF
+
+done
+done
+done
+done

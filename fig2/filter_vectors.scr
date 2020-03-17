@@ -1,0 +1,43 @@
+#!/bin/sh
+
+xdir=/Volumes/kclem_backup/data4/kclem/programs/EXEC
+
+for seas in MAM JJA SON DJF ann
+do
+
+for time in 7918 8918  9718 0018
+do
+
+for lev in 10m 500
+do
+
+## filter vectors for divergent wind
+${xdir}/set_range_miss.x <<EOF
+&param file1="u${lev}_${time}_${seas}_slope.srv" file2="v${lev}_${time}_${seas}_slope.srv" file3="u${lev}_${time}_${seas}_sig.srv" file4="v${lev}_${time}_${seas}_sig.srv" file5="u${lev}_${time}_${seas}_sig_filt10pct.srv" file6="v${lev}_${time}_${seas}_sig_filt10pct.srv" thold=0.90 &end
+EOF
+
+for ifile in u${lev}_${time}_${seas}_sig_filt10pct v${lev}_${time}_${seas}_sig_filt10pct
+do
+
+${xdir}/srv2grads2.x <<EOF 
+&param file1="${ifile}.srv" file2="${ifile}.bin" &end
+EOF
+
+cat > ${ifile}.des <<EOF
+DSET ^${ifile}.bin
+TITLE ${seas} ${lev}
+options sequential
+UNDEF -9e33
+XDEF 240 LINEAR 0 1.5
+YDEF 121 LINEAR -90 1.5
+ZDEF 1 LEVELS 1000
+TDEF 1 LINEAR Jan1979 1yr
+VARS 1
+var 1 99 ${lev}
+ENDVARS
+EOF
+
+done
+done
+done
+done

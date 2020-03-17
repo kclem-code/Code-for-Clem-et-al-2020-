@@ -1,0 +1,62 @@
+#!/bin/sh
+
+ddir=/Volumes/kclem_backup/data1/CMIP5/picontrol_seas_data
+xdir=/Volumes/kclem_backup/data4/kclem/programs/EXEC
+
+
+for var in psl ts tas
+#ts tas
+do
+
+for seas in ann
+do
+
+## get full multi-model mean for Fig. 3b-d
+cdo ensmean ${var}_piControl_Amon_ACCESS1_0_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_ACCESS1_3_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_bcc_csm1_1_m_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_bcc_csm1_1_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_BNU_ESM_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_CanESM2_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_CCSM4_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_CCSM4_r2i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_CCSM4_r3i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_CESM1_BGC_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_CESM1_CAM5_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_CESM1_FASTCHEM_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_CESM1_WACCM_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_CMCC_CESM_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_CMCC_CM_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_CMCC_CMS_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_CNRM_CM5_2_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_CNRM_CM5_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_CSIRO_Mk3_6_0_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_FGOALS_g2_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_FGOALS_s2_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_FIO_ESM_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_GFDL_CM3_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_GFDL_ESM2G_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_GFDL_ESM2M_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_GISS_E2_H_CC_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_GISS_E2_H_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_GISS_E2_H_r1i1p2_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_GISS_E2_H_r1i1p3_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_GISS_E2_R_CC_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_GISS_E2_R_r1i1p141_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_GISS_E2_R_r1i1p142_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_GISS_E2_R_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_GISS_E2_R_r1i1p2_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_GISS_E2_R_r1i1p3_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_HadGEM2_CC_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_HadGEM2_ES_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_inmcm4_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_IPSL_CM5A_LR_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_IPSL_CM5A_MR_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_IPSL_CM5B_LR_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_MIROC4h_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_MIROC5_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_MIROC_ESM_CHEM_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_MIROC_ESM_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_MPI_ESM_LR_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_MPI_ESM_MR_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_MPI_ESM_P_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_MRI_CGCM3_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_NorESM1_ME_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_NorESM1_M_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_mmm_${seas}_30yrwarming_slope.nc
+#${var}_piControl_Amon_EC_EARTH_r1i1p1_${seas}_30yrwarming_slope.nc
+
+
+## get multi-model mean of weddell sea PSL negative trend for Fig. 4a,c,e
+cdo ensmean ${var}_piControl_Amon_CanESM2_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_IPSL_CM5A_MR_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_CCSM4_r3i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_MPI_ESM_LR_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_GFDL_CM3_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_GISS_E2_R_r1i1p142_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_MPI_ESM_P_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_HadGEM2_ES_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_CESM1_CAM5_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_CNRM_CM5_2_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_GISS_E2_H_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_GFDL_ESM2G_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_CCSM4_r2i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_GISS_E2_R_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_GISS_E2_H_CC_r1i1p1_${seas}_30yrwarming_slope.nc  ${var}_piControl_Amon_GISS_E2_R_CC_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_bcc_csm1_1_r1i1p1_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_weddellmmm_${seas}_30yrwarming_slope.nc
+
+
+
+for model in mmm weddellmmm 
+do
+
+
+
+cdo -f srv copy ${var}_piControl_Amon_${model}_${seas}_30yrwarming_slope.nc ${var}_piControl_Amon_${model}_${seas}_30yrwarming_slope.srv
+
+
+for var2 in slope 
+do
+
+for ifile in ${var}_piControl_Amon_${model}_${seas}_30yrwarming_${var2}
+do
+
+${xdir}/srv2grads2.x <<EOF
+&param file1="${ifile}.srv" file2="${ifile}.bin" &end
+EOF
+
+cat > ${ifile}.des <<EOF
+DSET ^${ifile}.bin
+TITLE ${var} ${var3}
+options sequential
+UNDEF -9e33
+XDEF 180 LINEAR 0 2
+YDEF 91 LINEAR -90 2
+ZDEF 1 LEVELS 1000
+TDEF 1 LINEAR Jan1979 1yr
+VARS 1
+var 1 99 ${var}
+ENDVARS
+EOF
+
+done
+done
+done
+done
+done
+
+

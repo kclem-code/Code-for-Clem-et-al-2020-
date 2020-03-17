@@ -1,0 +1,598 @@
+#!/bin/sh
+
+ddir=/Volumes/kclem_backup/data1/CMIP5/picontrol_seas_data
+xdir=/Volumes/kclem_backup/data4/kclem/programs/EXEC
+
+## THIS SCRIPT CALCULATES THE TREND DURING THE 30-YEAR PERIOD OVER WHICH THE STRONGEST NEGATIVE IPO RESIDUAL TREND OCCURRED IN EACH ENSEMBLE MEMBER.EC_EARTH DOES NOT HAVE TS, SO NOT INCLUDING IT HERE
+
+for model in ACCESS1_0_r1i1p1 ACCESS1_3_r1i1p1 bcc_csm1_1_m_r1i1p1 bcc_csm1_1_r1i1p1 BNU_ESM_r1i1p1 CanESM2_r1i1p1 CCSM4_r1i1p1 CCSM4_r2i1p1 CCSM4_r3i1p1 CESM1_BGC_r1i1p1 CESM1_CAM5_r1i1p1 CESM1_FASTCHEM_r1i1p1 CESM1_WACCM_r1i1p1 CMCC_CESM_r1i1p1 CMCC_CM_r1i1p1 CMCC_CMS_r1i1p1 CNRM_CM5_2_r1i1p1 CNRM_CM5_r1i1p1 CSIRO_Mk3_6_0_r1i1p1 FGOALS_g2_r1i1p1 FGOALS_s2_r1i1p1 FIO_ESM_r1i1p1 GFDL_CM3_r1i1p1 GFDL_ESM2G_r1i1p1 GFDL_ESM2M_r1i1p1 GISS_E2_H_CC_r1i1p1 GISS_E2_H_r1i1p1 GISS_E2_H_r1i1p2 GISS_E2_H_r1i1p3 GISS_E2_R_CC_r1i1p1 GISS_E2_R_r1i1p141 GISS_E2_R_r1i1p142 GISS_E2_R_r1i1p1 GISS_E2_R_r1i1p2 GISS_E2_R_r1i1p3 HadGEM2_CC_r1i1p1 HadGEM2_ES_r1i1p1 inmcm4_r1i1p1 IPSL_CM5A_LR_r1i1p1 IPSL_CM5A_MR_r1i1p1 IPSL_CM5B_LR_r1i1p1 MIROC4h_r1i1p1 MIROC5_r1i1p1 MIROC_ESM_CHEM_r1i1p1 MIROC_ESM_r1i1p1 MPI_ESM_LR_r1i1p1 MPI_ESM_MR_r1i1p1 MPI_ESM_P_r1i1p1 MRI_CGCM3_r1i1p1 NorESM1_ME_r1i1p1 NorESM1_M_r1i1p1
+#EC_EARTH_r1i1p1
+do
+
+for var in psl ts tas
+#ts tas
+do
+
+for seas in ann
+do
+
+#cdo timmean ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_ltm.nc
+
+#cdo ymonsub ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_ltm.nc ${var}_piControl_Amon_${model}_${seas}_anom.nc
+
+
+if [ $model = "ACCESS1_0_r1i1p1" ];then
+
+
+cdo seltimestep,268/297 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,270/299 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+
+elif [ $model = "ACCESS1_3_r1i1p1" ];then
+
+
+cdo seltimestep,432/461 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,386/415 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+
+elif [ $model = "bcc_csm1_1_m_r1i1p1" ];then
+
+
+cdo seltimestep,194/223 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,57/86 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+
+elif [ $model = "bcc_csm1_1_r1i1p1" ];then
+
+
+cdo seltimestep,360/389 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,216/245 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+
+elif [ $model = "BNU_ESM_r1i1p1" ];then
+
+
+cdo seltimestep,105/134 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,231/260 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+
+elif [ $model = "CanESM2_r1i1p1" ];then
+
+
+cdo seltimestep,594/623 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,179/208 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+
+elif [ $model = "CCSM4_r1i1p1" ];then
+
+
+cdo seltimestep,466/495 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,451/480 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+
+elif [ $model = "CCSM4_r2i1p1" ];then
+
+
+cdo seltimestep,22/51 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,101/130 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+
+elif [ $model = "CCSM4_r3i1p1" ];then
+
+
+cdo seltimestep,34/63 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,36/65 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+
+elif [ $model = "CESM1_BGC_r1i1p1" ];then
+
+
+cdo seltimestep,320/349 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,357/386 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+
+elif [ $model = "CESM1_CAM5_r1i1p1" ];then
+
+cdo seltimestep,10/39 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,71/100 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+
+
+
+elif [ $model = "CESM1_FASTCHEM_r1i1p1" ];then
+
+cdo seltimestep,102/131 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,165/194 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+
+
+
+elif [ $model = "CESM1_WACCM_r1i1p1" ];then
+
+cdo seltimestep,16/45 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,134/163 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+
+
+
+elif [ $model = "CMCC_CESM_r1i1p1" ];then
+
+cdo seltimestep,213/242 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,79/108 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+
+
+
+elif [ $model = "CMCC_CM_r1i1p1" ];then
+
+cdo seltimestep,49/78 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,134/163 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+
+
+
+elif [ $model = "CMCC_CMS_r1i1p1" ];then
+
+cdo seltimestep,450/479 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,122/151 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+
+
+
+elif [ $model = "CNRM_CM5_2_r1i1p1" ];then
+
+cdo seltimestep,166/195 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,98/127 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+
+
+
+elif [ $model = "CNRM_CM5_r1i1p1" ];then
+
+cdo seltimestep,247/276 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,325/354 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+
+
+
+elif [ $model = "CSIRO_Mk3_6_0_r1i1p1" ];then
+
+cdo seltimestep,98/127 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,57/86 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+
+
+
+#elif [ $model = "EC_EARTH_r1i1p1" ];then
+
+#cdo seltimestep, ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+#cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,253/282 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+
+
+
+elif [ $model = "FGOALS_g2_r1i1p1" ];then
+
+cdo seltimestep,533/562 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,573/602 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+
+
+
+elif [ $model = "FGOALS_s2_r1i1p1" ];then
+
+cdo seltimestep,24/53 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,153/182 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+
+
+
+elif [ $model = "FIO_ESM_r1i1p1" ];then
+
+cdo seltimestep,258/287 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,63/92 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+
+
+
+elif [ $model = "GFDL_CM3_r1i1p1" ];then
+
+cdo seltimestep,389/418 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,378/407 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+
+
+
+elif [ $model = "GFDL_ESM2G_r1i1p1" ];then
+
+cdo seltimestep,122/151 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,368/397 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+
+
+
+elif [ $model = "GFDL_ESM2M_r1i1p1" ];then
+
+cdo seltimestep,106/135 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,359/388 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+
+
+
+elif [ $model = "GISS_E2_H_CC_r1i1p1" ];then
+
+cdo seltimestep,169/198 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,14/43 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+
+
+
+elif [ $model = "GISS_E2_H_r1i1p1" ];then
+
+cdo seltimestep,225/254 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,365/394 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+
+
+
+elif [ $model = "GISS_E2_H_r1i1p2" ];then
+
+cdo seltimestep,420/449 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,12/41 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+
+
+
+elif [ $model = "GISS_E2_H_r1i1p3" ];then
+
+cdo seltimestep,363/392 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,124/153 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+
+
+
+elif [ $model = "GISS_E2_R_CC_r1i1p1" ];then
+
+cdo seltimestep,67/96 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,171/200 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+
+
+
+elif [ $model = "GISS_E2_R_r1i1p141" ];then
+
+cdo seltimestep,914/943 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,1047/1076 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+
+
+
+elif [ $model = "GISS_E2_R_r1i1p142" ];then
+
+cdo seltimestep,71/100 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,60/89 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+
+
+
+elif [ $model = "GISS_E2_R_r1i1p1" ];then
+
+cdo seltimestep,670/699 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,95/124 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+
+
+
+elif [ $model = "GISS_E2_R_r1i1p2" ];then
+
+cdo seltimestep,312/341 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,252/281 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+
+
+
+elif [ $model = "GISS_E2_R_r1i1p3" ];then
+
+cdo seltimestep,196/225 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,316/345 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+
+
+
+elif [ $model = "HadGEM2_CC_r1i1p1" ];then
+
+cdo seltimestep,103/132 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,177/206 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+
+
+
+elif [ $model = "HadGEM2_ES_r1i1p1" ];then
+
+cdo seltimestep,212/241 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,89/118 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+
+
+
+elif [ $model = "inmcm4_r1i1p1" ];then
+
+cdo seltimestep,185/214 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,95/124 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+
+
+
+elif [ $model = "IPSL_CM5A_LR_r1i1p1" ];then
+
+cdo seltimestep,859/888 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,317/346 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+
+
+
+elif [ $model = "IPSL_CM5A_MR_r1i1p1" ];then
+
+cdo seltimestep,183/212 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,11/40 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+
+
+
+elif [ $model = "IPSL_CM5B_LR_r1i1p1" ];then
+
+cdo seltimestep,48/77 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,50/79 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+
+
+
+elif [ $model = "MIROC4h_r1i1p1" ];then
+
+cdo seltimestep,38/67 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,50/79 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+
+
+
+elif [ $model = "MIROC5_r1i1p1" ];then
+
+cdo seltimestep,193/222 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,255/284 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+
+
+
+elif [ $model = "MIROC_ESM_CHEM_r1i1p1" ];then
+
+cdo seltimestep,86/115 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,188/217 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+
+
+
+elif [ $model = "MIROC_ESM_r1i1p1" ];then
+
+cdo seltimestep,557/586 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,513/542 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+
+
+
+elif [ $model = "MPI_ESM_LR_r1i1p1" ];then
+
+cdo seltimestep,562/591 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,163/192 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+
+
+
+elif [ $model = "MPI_ESM_MR_r1i1p1" ];then
+
+cdo seltimestep,868/897 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,909/938 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+
+
+
+elif [ $model = "MPI_ESM_P_r1i1p1" ];then
+
+cdo seltimestep,665/694 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,1091/1120 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+
+
+
+elif [ $model = "MRI_CGCM3_r1i1p1" ];then
+
+cdo seltimestep,89/118 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,23/52 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+
+
+
+elif [ $model = "NorESM1_ME_r1i1p1" ];then
+
+
+cdo seltimestep,131/160 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,169/198 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+
+elif [ $model = "NorESM1_M_r1i1p1" ];then
+
+
+cdo seltimestep,135/164 ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc
+
+cdo -b 32 trend ${var}_piControl_Amon_${model}_${seas}_30yrnegipores.nc afile.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_slope.nc
+
+#cdo timmean -seltimestep,122/151 ${var}_piControl_Amon_${model}_${seas}_anom.nc ${var}_piControl_Amon_${model}_${seas}_30yrnegipores_anom.nc
+
+fi
+
+
+done
+done
+done
+
+
+
+
+
+
+
+
+
+

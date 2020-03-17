@@ -1,0 +1,88 @@
+#!/bin/sh
+
+ddir=/Volumes/kclem_backup/data1/CMIP5/picontrol_seas_data
+xdir=/Volumes/kclem_backup/data4/kclem/programs/EXEC
+
+## CALCULATE THE TRIPOLE INDEX FOLLOWING HENLEY ET AL (2015) AND NINO3.4 INDEX FOR THE CMIP5 MODELS. EC_EARTH DOES NOT HAVE TS, SO CANNOT CALCULATE TRIPOLE/NINO3.4 INDEX FOR THIS MODEL.
+
+for model in ACCESS1_0_r1i1p1 ACCESS1_3_r1i1p1 bcc_csm1_1_m_r1i1p1 bcc_csm1_1_r1i1p1 BNU_ESM_r1i1p1 CanESM2_r1i1p1 CCSM4_r1i1p1 CCSM4_r2i1p1 CCSM4_r3i1p1 CESM1_BGC_r1i1p1 CESM1_CAM5_r1i1p1 CESM1_FASTCHEM_r1i1p1 CESM1_WACCM_r1i1p1 CMCC_CESM_r1i1p1 CMCC_CM_r1i1p1 CMCC_CMS_r1i1p1 CNRM_CM5_2_r1i1p1 CNRM_CM5_r1i1p1 CSIRO_Mk3_6_0_r1i1p1 FGOALS_g2_r1i1p1 FGOALS_s2_r1i1p1 FIO_ESM_r1i1p1 GFDL_CM3_r1i1p1 GFDL_ESM2G_r1i1p1 GFDL_ESM2M_r1i1p1 GISS_E2_H_CC_r1i1p1 GISS_E2_H_r1i1p1 GISS_E2_H_r1i1p2 GISS_E2_H_r1i1p3 GISS_E2_R_CC_r1i1p1 GISS_E2_R_r1i1p141 GISS_E2_R_r1i1p142 GISS_E2_R_r1i1p1 GISS_E2_R_r1i1p2 GISS_E2_R_r1i1p3 HadGEM2_CC_r1i1p1 HadGEM2_ES_r1i1p1 inmcm4_r1i1p1 IPSL_CM5A_LR_r1i1p1 IPSL_CM5A_MR_r1i1p1 IPSL_CM5B_LR_r1i1p1 MIROC4h_r1i1p1 MIROC5_r1i1p1 MIROC_ESM_CHEM_r1i1p1 MIROC_ESM_r1i1p1 MPI_ESM_LR_r1i1p1 MPI_ESM_MR_r1i1p1 MPI_ESM_P_r1i1p1 MRI_CGCM3_r1i1p1 NorESM1_ME_r1i1p1 NorESM1_M_r1i1p1
+#EC_EARTH_r1i1p1
+do
+
+for var in ts
+#ts tas
+do
+
+for seas in ann
+do
+
+cdo timmean ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_ltm.nc
+
+cdo -f srv ymonsub ${ddir}/${var}_piControl_Amon_${model}_${seas}.nc ${var}_piControl_Amon_${model}_${seas}_ltm.nc ${var}_piControl_Amon_${model}_${seas}_anom.srv
+
+
+#get nw pac box
+x1=71  #140E
+x2=108  #146W
+y1=59  #26N
+y2=68  #44N
+
+cdo selindexbox,${x1},${x2},${y1},${y2} ${var}_piControl_Amon_${model}_${seas}_anom.srv ${var}_piControl_Amon_${model}_${seas}_anom_nwpac.srv
+
+${xdir}/areameansrv_valid.x <<EOF
+&param file1="${var}_piControl_Amon_${model}_${seas}_anom_nwpac.srv" file2="junk.dat" file3="${var}_piControl_Amon_${model}_${seas}_anom_nwpac_avg.srv" deltay=2 yfirst=26 &end
+EOF
+
+
+#get eq pac box
+x1=86  #170E
+x2=136  #90W
+y1=41  #10S
+y2=51  #10N
+
+cdo selindexbox,${x1},${x2},${y1},${y2} ${var}_piControl_Amon_${model}_${seas}_anom.srv ${var}_piControl_Amon_${model}_${seas}_anom_eqpac.srv
+
+${xdir}/areameansrv_valid.x <<EOF
+&param file1="${var}_piControl_Amon_${model}_${seas}_anom_eqpac.srv" file2="junk.dat" file3="${var}_piControl_Amon_${model}_${seas}_anom_eqpac_avg.srv" deltay=2 yfirst=-10 &end
+EOF
+
+
+#get sw pac box
+x1=76  #150E
+x2=101  #160W
+y1=21  #50S
+y2=38  #16S
+
+cdo selindexbox,${x1},${x2},${y1},${y2} ${var}_piControl_Amon_${model}_${seas}_anom.srv ${var}_piControl_Amon_${model}_${seas}_anom_swpac.srv
+
+${xdir}/areameansrv_valid.x <<EOF
+&param file1="${var}_piControl_Amon_${model}_${seas}_anom_swpac.srv" file2="junk.dat" file3="${var}_piControl_Amon_${model}_${seas}_anom_swpac_avg.srv" deltay=2 yfirst=-50 &end
+EOF
+
+
+#get nino 3.4 box
+x1=96  #170W
+x2=121  #120W
+y1=44  #4S
+y2=48  #4N
+
+cdo selindexbox,${x1},${x2},${y1},${y2} ${var}_piControl_Amon_${model}_${seas}_anom.srv ${var}_piControl_Amon_${model}_${seas}_anom_nino34.srv
+
+${xdir}/areameansrv_valid.x <<EOF
+&param file1="${var}_piControl_Amon_${model}_${seas}_anom_nino34.srv" file2="junk.dat" file3="${var}_piControl_Amon_${model}_${seas}_anom_nino34_avg.srv" deltay=2 yfirst=-4 &end
+EOF
+
+cdo output ${var}_piControl_Amon_${model}_${seas}_anom_nino34_avg.srv > ${var}_piControl_Amon_${model}_${seas}_nino34_index.txt
+
+
+cdo ensmean ${var}_piControl_Amon_${model}_${seas}_anom_nwpac_avg.srv ${var}_piControl_Amon_${model}_${seas}_anom_swpac_avg.srv ${var}_piControl_Amon_${model}_${seas}_anom_extratrop_avg.srv
+
+cdo sub ${var}_piControl_Amon_${model}_${seas}_anom_eqpac_avg.srv ${var}_piControl_Amon_${model}_${seas}_anom_extratrop_avg.srv ${var}_piControl_Amon_${model}_${seas}_tripole_index.srv
+
+cdo output ${var}_piControl_Amon_${model}_${seas}_tripole_index.srv > ${var}_piControl_Amon_${model}_${seas}_tripole_index.txt
+
+done
+done
+done
+
+
